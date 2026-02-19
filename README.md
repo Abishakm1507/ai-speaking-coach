@@ -1,73 +1,52 @@
-# React + TypeScript + Vite
+# 🗣 AI Speaking Coach
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern AI-powered speaking coach web application designed to help users practice and improve their spoken communication skills with instant feedback and interactive insights. This project provides a responsive React + TypeScript frontend built with Vite, aiming to integrate speech analysis and AI-driven techniques to evaluate and enhance user speaking performance.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+✔ Built with React + TypeScript and Vite  
+✔ Real-time guidance for speaking fluency  
+✔ Clean, responsive UI
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React** – Component-based UI library  
+- **TypeScript** – Static typing for better tooling and reliability  
+- **Vite** – Fast build and development tooling  
+- **Tailwind CSS** – Utility-first styling framework  
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📦 Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the repo
+
+```
+git clone https://github.com/Abishakm1507/ai-speaking-coach.git
+cd ai-speaking-coach
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Install dependencies
 ```
+npm install
+```
+
+### 3. Run the development server
+```
+npm run dev
+```
+Visit http://localhost:5173 in your browser to view the app.
+
+---
+
+## 📈 Future Improvements
+
+✨ Add speech-to-text integration <br>
+✨ AI feedback with GPT or Whisper <br>
+✨ Speaking metrics dashboard <br>
+✨ Real-time coaching suggestions <br>
+✨ Global multilingual support <br>
