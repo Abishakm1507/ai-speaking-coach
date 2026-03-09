@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
-import { Settings, Trash2, AlertCircle } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
+import { Settings, Trash2, AlertCircle, Send } from 'lucide-react';
 import type { AppSettings } from '../types';
 import { useConversation } from '../hooks/useConversation';
 import { useRecorder } from '../hooks/useRecorder';
@@ -17,6 +17,7 @@ export const ChatInterface = ({ settings, onOpenSettings }: ChatInterfaceProps) 
     const { isRecording, startRecording, stopRecording, permission, error: recorderError } = useRecorder();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [textInput, setTextInput] = useState('');
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -36,6 +37,24 @@ export const ChatInterface = ({ settings, onOpenSettings }: ChatInterfaceProps) 
         }
     };
 
+    const handleSendText = async () => {
+        if (!textInput.trim()) return;
+        
+        const trimmedText = textInput.trim();
+        setTextInput('');
+        
+        // For text input, we'll treat it as if it was transcribed
+        // We need to modify processUserAudio to handle text input
+        await processUserAudio('', trimmedText); // Pass empty audio and the text
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendText();
+        }
+    };
+
     return (
         <div className="chat-interface">
             <header className="chat-header">
@@ -47,10 +66,10 @@ export const ChatInterface = ({ settings, onOpenSettings }: ChatInterfaceProps) 
                     </div>
                 </div>
                 <div className="header-actions">
-                    <button className="icon-btn" onClick={clearHistory} title="Clear Conversation">
+                    <button onClick={clearHistory} title="Clear Conversation">
                         <Trash2 size={18} />
                     </button>
-                    <button className="icon-btn" onClick={onOpenSettings} title="Settings">
+                    <button onClick={onOpenSettings} title="Settings">
                         <Settings size={18} />
                     </button>
                 </div>
@@ -68,7 +87,6 @@ export const ChatInterface = ({ settings, onOpenSettings }: ChatInterfaceProps) 
                                 <span>Please set your Gemini API Key in Settings to start.</span>
                             </div>
                         )}
-                        <p className="hint">Tap the microphone to start speaking.</p>
                     </div>
                 )}
 
@@ -86,12 +104,33 @@ export const ChatInterface = ({ settings, onOpenSettings }: ChatInterfaceProps) 
             </div>
 
             <div className="controls-area">
-                <AudioRecorder
-                    isRecording={isRecording}
-                    isProcessing={isProcessing}
-                    onToggleRecording={handleToggleRecording}
-                    permissionError={recorderError || (permission === false ? 'Microphone access denied' : null)}
-                />
+                <div className="audio-recorder-container">
+                    <AudioRecorder
+                        isRecording={isRecording}
+                        isProcessing={isProcessing}
+                        onToggleRecording={handleToggleRecording}
+                        permissionError={recorderError || (permission === false ? 'Microphone access denied' : null)}
+                    />
+                </div>
+                <div className="text-input-container">
+                    <textarea
+                        value={textInput}
+                        onChange={(e) => setTextInput(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Type your message in Japanese..."
+                        className="text-input"
+                        rows={1}
+                        disabled={isProcessing}
+                    />
+                    <button 
+                        className="send-btn" 
+                        onClick={handleSendText}
+                        disabled={!textInput.trim() || isProcessing}
+                        aria-label="Send message"
+                    >
+                        <Send size={18} />
+                    </button>
+                </div>
             </div>
         </div>
     );

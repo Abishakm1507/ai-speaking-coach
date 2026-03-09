@@ -102,17 +102,47 @@ button:active {
 }
 
 .icon-btn {
-  padding: 8px;
+  padding: 10px;
   border-radius: var(--radius-m);
-  background: var(--surface-color);
+  background: transparent;
   color: var(--text-secondary);
-  border: 1px solid var(--glass-border);
+  border: none;
+  outline: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-btn:hover {
-  background: var(--surface-elevated);
-  color: var(--text-primary);
-  border-color: var(--text-muted);
+  transform: scale(1.05);
+}
+
+.clear-btn {
+  outline-color: #ef4444;
+  color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.clear-btn:hover {
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.8);
+  color: #ff6b6b;
+  outline-color: #ff6b6b;
+}
+
+.settings-btn {
+  outline-color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.settings-btn:hover {
+  outline-color: rgba(255, 255, 255, 1);
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6);
 }
 
 ::-webkit-scrollbar {

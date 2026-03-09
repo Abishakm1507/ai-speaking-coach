@@ -29,6 +29,15 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
     return (
         <div className="message-container ai">
             <div className="bubble ai-bubble">
+                {/* User Speech Section */}
+                <div className="section transcription-section">
+                    <span className="label">You said</span>
+                    <p className="japanese-text">{message.original}</p>
+                    {message.userTranscriptionEnglish && (
+                        <p className="english-text">{message.userTranscriptionEnglish}</p>
+                    )}
+                </div>
+
                 {/* Reply Section */}
                 <div className="section reply-section">
                     <div className="reply-header">
@@ -38,25 +47,20 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
                         </button>
                     </div>
                     <p className="japanese-text">{message.reply}</p>
+                    {message.aiReplyEnglish && (
+                        <p className="english-text">{message.aiReplyEnglish}</p>
+                    )}
                 </div>
 
-                {/* Correction Section (Conditional) */}
-                {message.correction && message.correction.length > 5 && message.correction !== "null" && (
-                    <div className="section correction-section">
-                        <span className="label">💡 Correction</span>
-                        <p className="japanese-text">{message.correction}</p>
+                {/* Suggestion Section */}
+                {(message.improvement || message.correction) && (
+                    <div className="section suggestion-section">
+                        <span className="label">Suggestion</span>
+                        <p className="japanese-text">{message.improvement || message.correction}</p>
                     </div>
                 )}
 
-                {/* Improvement Section */}
-                {message.improvement && (
-                    <div className="section improvement-section">
-                        <span className="label">✨ Natural Version</span>
-                        <p className="japanese-text">{message.improvement}</p>
-                    </div>
-                )}
-
-                {/* Explanation Section */}
+                {/* Explanation Section (if needed) */}
                 {message.explanation && (
                     <div className="section explanation-section">
                         <span className="label">📝 Explanation</span>

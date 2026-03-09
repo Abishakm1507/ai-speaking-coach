@@ -45,8 +45,8 @@
     border: 1px solid var(--glass-border);
     color: var(--text-primary);
     border-bottom-left-radius: 4px;
-    width: 100%;
     max-width: 90%;
+    width: 100%;
 }
 
 .section {
@@ -55,6 +55,7 @@
     background: var(--surface-elevated);
     border-radius: var(--radius-m);
     border: 1px solid var(--glass-border);
+    position: relative;
 }
 
 .section:last-child {
@@ -77,6 +78,15 @@
 .japanese-text {
     font-size: 1.15rem;
     font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.english-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-style: italic;
+    line-height: 1.4;
 }
 
 .reply-header {
@@ -87,9 +97,9 @@
 }
 
 .reply-section {
-    background: transparent;
-    border: none;
-    padding: 0;
+    background: var(--surface-elevated);
+    border: 1px solid var(--glass-border);
+    padding: var(--space-m);
 }
 
 .play-btn {
@@ -106,20 +116,19 @@
     transform: scale(1.1);
 }
 
-.correction-section {
-    border-left: 3px solid #f59e0b;
-    /* Amber 500 */
+.transcription-section {
+    border-left: 3px solid var(--secondary);
 }
 
-.correction-section .japanese-text {
-    color: #fbbf24;
+.transcription-section .japanese-text {
+    color: var(--secondary);
 }
 
-.improvement-section {
+.suggestion-section {
     border-left: 3px solid var(--primary);
 }
 
-.improvement-section .japanese-text {
+.suggestion-section .japanese-text {
     color: var(--primary);
 }
 

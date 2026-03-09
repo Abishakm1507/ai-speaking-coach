@@ -8,7 +8,7 @@ export const useConversation = (settings: AppSettings) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const processUserAudio = useCallback(async (audioBase64: string) => {
+    const processUserAudio = useCallback(async (audioBase64: string, textInput?: string) => {
         setIsProcessing(true);
         setError(null);
 
@@ -17,8 +17,8 @@ export const useConversation = (settings: AppSettings) => {
             id: Date.now().toString(),
             role: 'user',
             timestamp: Date.now(),
-            original: 'Processing audio...',
-            audio: audioBase64
+            original: textInput || 'Processing audio...',
+            audio: audioBase64 || undefined
         };
 
         // Optimistically add user message (or wait for transcription?)
@@ -31,7 +31,7 @@ export const useConversation = (settings: AppSettings) => {
             }
 
             // Call Gemini
-            const response = await generateResponse(audioBase64, messages, settings);
+            const response = await generateResponse(audioBase64, messages, settings, textInput);
 
             // Update User Message with transcription
             setMessages(prev => prev.map(m =>
@@ -45,11 +45,13 @@ export const useConversation = (settings: AppSettings) => {
                 id: (Date.now() + 1).toString(),
                 role: 'ai',
                 timestamp: Date.now(),
+                original: response.transcription, // Include transcription in AI message
                 reply: response.reply,
                 correction: response.correction,
                 improvement: response.improvement,
                 explanation: response.explanation,
-                // original: response.transcription // logic moved to user msg update
+                userTranscriptionEnglish: response.transcriptionEnglish,
+                aiReplyEnglish: response.replyEnglish,
             };
 
             setMessages(prev => [...prev, aiMsg]);

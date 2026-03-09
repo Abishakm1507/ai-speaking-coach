@@ -6,19 +6,22 @@ export const GEMINI_MODEL = 'gemini-2.5-flash';
 const RESPONSE_SCHEMA = {
     type: SchemaType.OBJECT,
     properties: {
-        transcription: { type: SchemaType.STRING, description: "Transcription of what the user said in Japanese" },
-        reply: { type: SchemaType.STRING, description: "Natural response to the user in Japanese" },
-        correction: { type: SchemaType.STRING, description: "Correction of the user's Japanese (if needed), otherwise null or empty" },
-        improvement: { type: SchemaType.STRING, description: "A more natural 'native-speaker' version of the user's sentence" },
-        explanation: { type: SchemaType.STRING, description: "Brief explanation in English of the correction or improvement" },
+        transcription: { type: SchemaType.STRING, description: "Exact transcription of what the user said in Japanese" },
+        transcriptionEnglish: { type: SchemaType.STRING, description: "English translation of the user's speech" },
+        reply: { type: SchemaType.STRING, description: "Natural conversational response in Japanese with a follow-up question" },
+        replyEnglish: { type: SchemaType.STRING, description: "English translation of the AI's reply" },
+        correction: { type: SchemaType.STRING, description: "Grammar or particle corrections if needed, otherwise empty" },
+        improvement: { type: SchemaType.STRING, description: "More natural native-speaker version of the user's sentence, or empty if no improvement needed" },
+        explanation: { type: SchemaType.STRING, description: "Brief explanation in English of any corrections or improvements made" },
     },
-    required: ["transcription", "reply", "improvement", "explanation"]
+    required: ["transcription", "transcriptionEnglish", "reply", "replyEnglish"]
 } as any;
 
 export const generateResponse = async (
     audioBase64: string,
     history: Message[],
-    settings: AppSettings
+    settings: AppSettings,
+    textInput?: string
 ) => {
     try {
         const genAI = new GoogleGenerativeAI(settings.apiKey);
@@ -32,7 +35,7 @@ export const generateResponse = async (
 
         // specific system prompt based on mode and level
         const systemPrompt = `
-      You are a friendly but strict Japanese Speaking Coach.
+      You are a supportive and encouraging Japanese Speaking Coach.
 
       CRITICAL OUTPUT RULES:
       - ALL Japanese text MUST be written in HIRAGANA ONLY.
@@ -44,16 +47,25 @@ export const generateResponse = async (
       
       Your task:
       1. Listen to the user's audio input.
-      2. Transcribe exactly what they said (Japanese).
-      3. Reply naturally to them in Japanese to keep the conversation going.
-      4. Correct any grammar/particle mistakes.
-      5. Provide a more natural 'Native' version of what they tried to say.
-      6. Explain your correction/suggestion briefly in English.
+      2. Transcribe exactly what they said in Japanese.
+      3. Provide an English translation of the user's speech.
+      4. Reply naturally to them in Japanese to keep the conversation going.
+      5. Provide an English translation of your reply.
+      6. Provide an improved version of their sentence when needed (grammar, particles, natural phrasing).
+      7. Explain your correction/suggestion briefly in English.
+      
+      Conversation Style:
+      - Be supportive and encouraging like a friendly coach
+      - Begin replies with natural Japanese reactions when appropriate (e.g., そうなんですね, いいですね, なるほど, すごいですね)
+      - Always include a follow-up question to continue the conversation
+      - Keep replies appropriate for the learner's ${settings.level} level
+      - Encourage the learner when their sentence is correct
+      - If the user speaks English, translate it to Japanese and continue in Japanese
       
       Important:
-      - Always keep your Japanese reply at the ${settings.level} level.
-      - If the user speaks English, simply translate it to Japanese in the 'correction' field and reply in Japanese.
-      - Ensure the 'reply' includes a follow-up question.
+      - The 'improvement' field should contain a more natural 'native-speaker' version of what they tried to say
+      - Only provide an improvement if the original sentence needs correction or could be more natural
+      - If the sentence is already good, you can leave improvement empty or the same as transcription
     `;
 
         // Construct history
@@ -82,19 +94,27 @@ export const generateResponse = async (
         const chat = model.startChat({
             history: [
                 { role: 'user', parts: [{ text: systemPrompt }] },
-                { role: 'model', parts: [{ text: 'Understood. I am ready to help you practice Japanese. Please speak.' }] },
+                { role: 'model', parts: [{ text: 'Understood. I am ready to help you practice Japanese. Please speak or type your message.' }] },
                 ...chatHistory
             ] as any[],
         });
 
-        const result = await chat.sendMessage([
-            {
+        let messageParts: any[] = [];
+        
+        if (textInput) {
+            // For text input, send the text directly
+            messageParts = [{ text: `User typed: ${textInput}` }];
+        } else {
+            // For audio input, send the audio
+            messageParts = [{
                 inlineData: {
                     mimeType: 'audio/webm', // Assumes hook records webm
                     data: audioBase64
                 }
-            }
-        ]);
+            }];
+        }
+
+        const result = await chat.sendMessage(messageParts);
 
         const responseText = result.response.text();
         return JSON.parse(responseText);

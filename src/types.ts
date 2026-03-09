@@ -6,11 +6,15 @@ export interface Message {
     timestamp: number;
 
     // AI Response fields
-    original?: string; // What the AI 'heard' or the user's text
-    reply?: string;
+    original?: string; // What the AI 'heard' or the user's text (Japanese)
+    reply?: string; // AI reply in Japanese
     correction?: string;
     improvement?: string;
     explanation?: string;
+    
+    // English translations
+    userTranscriptionEnglish?: string; // English translation of user's speech
+    aiReplyEnglish?: string; // English translation of AI reply
 }
 
 export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
