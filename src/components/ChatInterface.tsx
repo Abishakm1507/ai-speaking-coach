@@ -66,10 +66,10 @@ export const ChatInterface = ({ settings, onOpenSettings }: ChatInterfaceProps) 
                     </div>
                 </div>
                 <div className="header-actions">
-                    <button onClick={clearHistory} title="Clear Conversation">
+                    <button onClick={clearHistory} title="Clear Conversation" className="clear-btn">
                         <Trash2 size={18} />
                     </button>
-                    <button onClick={onOpenSettings} title="Settings">
+                    <button onClick={onOpenSettings} title="Settings" className="settings-btn">
                         <Settings size={18} />
                     </button>
                 </div>

@@ -26,7 +26,7 @@
 
 @media (max-width: 768px) {
     .chat-header {
-        padding: var(--space-l) var(--space-m);
+        padding: var(--space-xl) var(--space-m);
         gap: var(--space-m);
     }
     
@@ -84,6 +84,38 @@
 .header-actions {
     display: flex;
     gap: var(--space-m);
+}
+
+.header-actions button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-m);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.header-actions .clear-btn {
+    color: #f87171;
+    border: 1px solid #f87171;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.3);
+}
+
+.header-actions .clear-btn:hover {
+    box-shadow: 0 0 12px rgba(248, 113, 113, 0.5);
+}
+
+.header-actions .settings-btn {
+    color: var(--text-primary);
+    border: 1px solid var(--text-primary);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.header-actions .settings-btn:hover {
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
 }
 
 .messages-area {
