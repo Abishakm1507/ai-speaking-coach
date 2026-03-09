@@ -29,15 +29,15 @@
         padding: var(--space-xl) var(--space-m);
         gap: var(--space-m);
     }
-    
+
     .header-left h1 {
         font-size: 1.1rem;
     }
-    
+
     .badge-group {
         gap: 6px;
     }
-    
+
     .badge {
         font-size: 0.65rem;
         padding: 2px 8px;
@@ -313,6 +313,11 @@
 
     .header-left h1 {
         display: none;
+    }
+
+    .header-actions button {
+        margin-top: 8px;
+        margin-bottom: 8px;
     }
 
     .chat-header {
